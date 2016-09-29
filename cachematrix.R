@@ -1,15 +1,44 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions were made for preventing excessive calculation in inversing matrix
+## It cache inversed matrix and won't inverse it again, just return cached value
 
-## Write a short comment describing this function
+
+## It make list with get/set functions with captured state which has two matrix: orignal and inversed  
+## inversed set to NULL, it will get value when happened first access to inversed matrix with function cacheSolve
 
 makeCacheMatrix <- function(x = matrix()) {
-
+    
+    set <- function(new_m) {
+        m <<- new_m
+        solved <<- NULL
+    }
+    
+    set(x)
+    
+    get <- function() m
+    
+    setinverse <- function(inverse) solved <<- inverse
+    
+    getinverse <- function() solved
+    
+    list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## Return a matrix that is the inverse of 'x' and cache the inversed value
+## Next request will return cached value without any calculations
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    
+    ret <- x$getinverse()
+
+    if(!is.null(ret)) {
+        message("getting cached data")
+        return(ret)
+    }    
+    
+    ret <- solve(x$get())
+    
+    x$setinverse(ret)
+    
+    ret
 }
